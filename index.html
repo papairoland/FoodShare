@@ -56,3 +56,27 @@
     <div class="grid" id="foodList"></div>
   </section>
 
+  <section class="page" id="upload" hidden>
+    <h2>Élelmiszer feltöltése</h2>
+    <form id="uploadForm" class="box">
+      <label>Élelmiszer neve <input name="name" required placeholder="pl. Friss kenyér"></label>
+      <label>Leírás <textarea name="desc" rows="3" required placeholder="Rövid leírás az ételről..."></textarea></label>
+      <label>Kategória <select name="category" id="uploadCategory"></select></label>
+      <label>Mennyiség <input name="quantity" placeholder="pl. 10 db vagy 2 kg" required></label>
+      <label>Kép (nem kötelező) <input type="file" name="image" accept="image/*"></label>
+      <label>Város <input name="city" required placeholder="pl. Debrecen"></label>
+      <label>Átvételi cím <input name="address" required placeholder="pl. Piac utca 5."></label>
+      <label>Átvételi határidő <input type="date" name="deadline" required></label>
+      <label>Kapcsolattartás (e-mail vagy telefon) <input name="contact" required placeholder="pl. +36 30 123 4567"></label>
+      <label>Felajánlás típusa
+        <select name="offerType" id="offerType">
+          <option value="free">Ingyenes</option>
+          <option value="discount">Kedvezményes ár</option>
+        </select>
+      </label>
+      <label id="priceBox" hidden>Kedvezményes ár (Ft) <input type="number" name="price" min="1" placeholder="500"></label>
+      <button class="btn">Felajánlás közzététele</button>
+      <p id="uploadMsg" class="msg"></p>
+    </form>
+  </section>
+
