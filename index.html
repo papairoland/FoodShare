@@ -80,3 +80,47 @@
     </form>
   </section>
 
+  <section class="page" id="account" hidden>
+    <div id="authBox" class="two">
+      <form id="loginForm" class="box">
+        <h2>Bejelentkezés</h2>
+        <label>E-mail <input type="email" name="email" required></label>
+        <label>Jelszó <input type="password" name="password" required></label>
+        <button class="btn">Belépés</button>
+        <p class="msg" id="loginMsg"></p>
+        <small style="margin-top: 1rem; display: block; color: var(--text-muted);">
+          <b>Admin demó fiók:</b><br>E-mail: <code>admin@foodshare.hu</code><br>Jelszó: <code>admin123</code>
+        </small>
+      </form>
+      <form id="registerForm" class="box">
+        <h2>Regisztráció</h2>
+        <label>Név <input name="name" required></label>
+        <label>E-mail <input type="email" name="email" required></label>
+        <label>Jelszó (min. 4 karakter) <input type="password" name="password" minlength="4" required></label>
+        <button class="btn">Regisztráció</button>
+        <p class="msg" id="registerMsg"></p>
+      </form>
+    </div>
+    <div id="profileBox" hidden>
+      <h2>Felhasználói profil</h2>
+      <div class="box" id="profileInfo"></div>
+      <h2>Saját felajánlásaim</h2>
+      <div class="grid" id="myOffers"></div>
+      <h2>Lefoglalt élelmiszereim</h2>
+      <div class="grid" id="myReservations"></div>
+    </div>
+  </section>
+
+  <section class="page" id="business" hidden>
+    <h2>Éttermeknek, pékségeknek és boltoknak</h2>
+    <div class="box">
+      <p style="margin-bottom: 1rem;">Minden nap marad el eladatlan péksütemény, saláta vagy zöldség? Ne dobd ki! Töltsd fel a FoodShare-re, és percek alatt találsz rá átvevőt.</p>
+      <ul style="margin-left: 1.5rem; margin-bottom: 1.5rem;">
+        <li>Kevesebb hulladék, alacsonyabb szemétszállítási költség.</li>
+        <li>Pozitív közösségi megítélés a környéken.</li>
+        <li>A feltöltés ingyenes és egyszerű: egy űrlap, néhány kattintás.</li>
+      </ul>
+      <a href="#" class="btn" data-page="upload">Felajánlás feltöltése</a>
+    </div>
+  </section>
+
