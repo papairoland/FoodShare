@@ -296,3 +296,41 @@ input:focus, select:focus, textarea:focus {
   color: #f57f17;
 }
 
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.two {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+details {
+  background: var(--bg-card);
+  padding: 1rem;
+  border-radius: var(--radius);
+  margin-bottom: 0.8rem;
+  box-shadow: var(--shadow);
+}
+
+summary {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+details p {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 2rem;
+  grid-column: 1 / -1;
+}
+
