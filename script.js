@@ -42,3 +42,22 @@ let foods = loadData('fs_foods', demoFoods);
 let currentEmail = localStorage.getItem('fs_current') || ''; 
 let currentPage = 'home';
 
+function $(id) {
+  return document.getElementById(id);
+}
+
+function esc(text) {
+  const box = document.createElement('div');
+  box.textContent = text;
+  return box.innerHTML;
+}
+
+function getCurrentUser() {
+  return users.find(user => user.email === currentEmail);
+}
+
+function availableFoods() {
+  const today = daysFromNow(0);
+  return foods.filter(food => food.status === 'approved' && food.reservedBy === '' && food.deadline >= today);
+}
+
