@@ -173,3 +173,38 @@ function renderAccount() {
 function renderAdmin() {
   const user = getCurrentUser();
   if (!user || user.role !== 'admin') {
+    $('adminList').innerHTML = '<p class="empty">Ez az oldal csak adminisztrátorok számára érhető el.</p>';
+    return;
+  }
+
+  const sorted = [...foods].sort((a, b) => (a.status === 'pending' ? -1 : 1));
+  const html = sorted.map(food => {
+    let buttons = '';
+    if (food.status === 'pending') {
+      buttons += `<button type="button" class="btn small" data-action="approve" data-id="${food.id}">Jóváhagyom</button> `;
+    } else {
+      buttons += '<span class="tag">Jóváhagyva</span> ';
+    }
+    buttons += `<button type="button" class="btn small red" data-action="delete" data-id="${food.id}">Törlés</button>`;
+    return foodCard(food, buttons);
+  }).join('');
+  showList('adminList', html, 'Nincs megjeleníthető felajánlás.');
+}
+
+function renderPage(pageId) {
+  if (pageId === 'home') renderHome();
+  if (pageId === 'browse') renderBrowse();
+  if (pageId === 'account') renderAccount();
+  if (pageId === 'admin') renderAdmin();
+}
+
+function showPage(pageId) {
+  currentPage = pageId;
+  document.querySelectorAll('.page').forEach(page => page.hidden = true);
+  $(pageId).hidden = false;
+  $('menu').classList.remove('open');
+  updateMenu();
+  renderPage(pageId);
+  window.scrollTo(0, 0);
+}
+
