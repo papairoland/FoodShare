@@ -100,3 +100,39 @@ function updateMenu() {
   $('adminLink').hidden = !(user && user.role === 'admin');
 }
 
+function renderHome() {
+  const reservedCount = foods.filter(food => food.reservedBy !== '').length;
+  $('statSaved').textContent = 250 + reservedCount;
+  $('statUsers').textContent = 120 + users.length;
+
+  const featured = availableFoods().sort((a, b) => a.deadline.localeCompare(b.deadline)).slice(0, 3);
+  showList('featured', featured.map(food => foodCard(food, reserveButton(food))).join(''), 'Jelenleg nincs átvehető étel.');
+}
+
+function renderBrowse() {
+  let list = availableFoods();
+
+  const searchText = $('search').value.toLowerCase();
+  if (searchText) {
+    list = list.filter(food => (food.name + ' ' + food.desc).toLowerCase().includes(searchText));
+  }
+
+  const category = $('filterCategory').value;
+  if (category) {
+    list = list.filter(food => food.category === category);
+  }
+
+  const place = $('filterCity').value.toLowerCase();
+  if (place) {
+    list = list.filter(food => (food.city + ' ' + food.address).toLowerCase().includes(place));
+  }
+
+  if ($('sortBy').value === 'deadline') {
+    list.sort((a, b) => a.deadline.localeCompare(b.deadline));
+  } else {
+    list.sort((a, b) => b.id - a.id);
+  }
+
+  showList('foodList', list.map(food => foodCard(food, reserveButton(food))).join(''), 'Nincs a keresésnek megfelelő találat.');
+}
+
