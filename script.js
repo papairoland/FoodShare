@@ -136,3 +136,40 @@ function renderBrowse() {
   showList('foodList', list.map(food => foodCard(food, reserveButton(food))).join(''), 'Nincs a keresésnek megfelelő találat.');
 }
 
+function renderAccount() {
+  const user = getCurrentUser();
+  $('authBox').hidden = !!user;
+  $('profileBox').hidden = !user;
+  if (!user) return;
+
+  const myOffers = foods.filter(food => food.owner === user.email);
+  const myReservations = foods.filter(food => food.reservedBy === user.email);
+
+  $('profileInfo').innerHTML = `
+    <p><b>Név:</b> ${esc(user.name)}</p>
+    <p><b>E-mail:</b> ${esc(user.email)}</p>
+    <p><b>Fiók típusa:</b> ${user.role === 'admin' ? 'Adminisztrátor' : 'Felhasználó'}</p>
+    <p><b>Felajánlások:</b> ${myOffers.length} db · <b>Foglalások:</b> ${myReservations.length} db</p>
+    <button type="button" class="btn red small" style="margin-top:1rem;" data-action="logout">Kijelentkezés</button>
+  `;
+
+  const offersHtml = myOffers.map(food => {
+    let state = '<span class="tag">Elérhető</span>';
+    if (food.status === 'pending') state = '<span class="tag wait">Jóváhagyásra vár</span>';
+    if (food.reservedBy !== '') state = '<span class="tag price">Lefoglalták</span>';
+    const deleteBtn = `<button type="button" class="btn small red" data-action="delete" data-id="${food.id}">Törlés</button>`;
+    return foodCard(food, state + ' ' + deleteBtn);
+  }).join('');
+  showList('myOffers', offersHtml, 'Még nem töltöttél fel ételt.');
+
+  const reservationsHtml = myReservations.map(food => {
+    const contactInfo = `<p style="color:var(--primary); font-weight:bold;">Átvételhez kapcsolattartó: ${esc(food.contact)}</p>`;
+    const cancelBtn = `<button type="button" class="btn small red" data-action="cancel" data-id="${food.id}">Foglalás lemondása</button>`;
+    return foodCard(food, contactInfo + cancelBtn);
+  }).join('');
+  showList('myReservations', reservationsHtml, 'Még nem foglaltál le semmit.');
+}
+
+function renderAdmin() {
+  const user = getCurrentUser();
+  if (!user || user.role !== 'admin') {
