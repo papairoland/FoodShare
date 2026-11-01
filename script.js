@@ -208,3 +208,47 @@ function showPage(pageId) {
   window.scrollTo(0, 0);
 }
 
+function doAction(action, id) {
+  if (action === 'logout') {
+    currentEmail = '';
+    localStorage.removeItem('fs_current');
+    showPage('home');
+    return;
+  }
+
+  const food = foods.find(item => item.id === id);
+  if (!food && action !== 'logout') return;
+
+  if (action === 'reserve') {
+    if (!getCurrentUser()) {
+      alert('A foglaláshoz kérjük, jelentkezz be!');
+      showPage('account');
+      return;
+    }
+    if (food.owner === currentEmail) {
+      alert('A saját felajánlásodat nem foglalhatod le.');
+      return;
+    }
+    food.reservedBy = currentEmail;
+    alert('Sikeres foglalás! Az átvételi kapcsolattartási adatokat megtalálod a Fiókom / Profil menüpontban.');
+  }
+
+  if (action === 'cancel') {
+    food.reservedBy = '';
+  }
+
+  if (action === 'approve') {
+    food.status = 'approved';
+  }
+
+  if (action === 'delete') {
+    if (confirm('Biztosan törölni szeretnéd ezt a felajánlást?')) {
+      foods = foods.filter(item => item.id !== id);
+    }
+  }
+
+  saveData('fs_foods', foods);
+  renderPage(currentPage);
+  updateMenu();
+}
+
