@@ -252,3 +252,62 @@ function doAction(action, id) {
   updateMenu();
 }
 
+document.addEventListener('click', function (event) {
+  const target = event.target.closest('[data-page], [data-action]');
+  if (!target) return;
+  
+  event.preventDefault();
+  if (target.dataset.page) showPage(target.dataset.page);
+  if (target.dataset.action) doAction(target.dataset.action, Number(target.dataset.id));
+});
+
+$('menuBtn').addEventListener('click', function () {
+  $('menu').classList.toggle('open');
+});
+
+function login(user) {
+  currentEmail = user.email;
+  localStorage.setItem('fs_current', currentEmail);
+  showPage('account');
+}
+
+$('loginForm').addEventListener('submit', function (event) {
+  event.preventDefault();
+  const data = new FormData(event.target);
+  const user = users.find(u => u.email === data.get('email') && u.password === data.get('password'));
+  
+  if (user) {
+    $('loginMsg').textContent = '';
+    event.target.reset();
+    login(user);
+  } else {
+    $('loginMsg').textContent = 'Hibás e-mail cím vagy jelszó!';
+    $('loginMsg').className = 'msg error';
+  }
+});
+
+$('registerForm').addEventListener('submit', function (event) {
+  event.preventDefault();
+  const data = new FormData(event.target);
+  const email = data.get('email');
+
+  if (users.some(u => u.email === email)) {
+    $('registerMsg').textContent = 'Ezzel az e-mail címmel már regisztráltak.';
+    $('registerMsg').className = 'msg error';
+    return;
+  }
+
+  const newUser = {
+    name: data.get('name'),
+    email: email,
+    password: data.get('password'),
+    role: 'user'
+  };
+
+  users.push(newUser);
+  saveData('fs_users', users);
+  $('registerMsg').textContent = '';
+  event.target.reset();
+  login(newUser);
+});
+
