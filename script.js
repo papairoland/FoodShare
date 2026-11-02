@@ -375,3 +375,19 @@ $('uploadForm').addEventListener('submit', function (event) {
   }
 });
 
+$('contactForm').addEventListener('submit', function (event) {
+  event.preventDefault();
+  event.target.reset();
+  $('contactMsg').textContent = 'Köszönjük az üzenetet! Hamarosan válaszolunk.';
+});
+
+['search', 'filterCity'].forEach(id => $(id).addEventListener('input', renderBrowse));
+['filterCategory', 'sortBy'].forEach(id => $(id).addEventListener('change', renderBrowse));
+
+categories.forEach(category => {
+  $('filterCategory').innerHTML += `<option value="${category}">${category}</option>`;
+  $('uploadCategory').innerHTML += `<option value="${category}">${category}</option>`;
+});
+
+if (!getCurrentUser()) currentEmail = '';
+showPage('home');
