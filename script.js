@@ -311,3 +311,67 @@ $('registerForm').addEventListener('submit', function (event) {
   login(newUser);
 });
 
+$('offerType').addEventListener('change', function () {
+  $('priceBox').hidden = $('offerType').value !== 'discount';
+});
+
+$('uploadForm').addEventListener('submit', function (event) {
+  event.preventDefault();
+  const user = getCurrentUser();
+  if (!user) {
+    alert('Étel feltöltéséhez kérjük, jelentkezz be!');
+    showPage('account');
+    return;
+  }
+
+  const form = event.target;
+  const data = new FormData(form);
+  const imageFile = data.get('image');
+
+  function saveFood(imageDataUrl) {
+    const isDiscount = data.get('offerType') === 'discount';
+    const newFood = {
+      id: Date.now(),
+      name: data.get('name'),
+      desc: data.get('desc'),
+      category: data.get('category'),
+      quantity: data.get('quantity'),
+      city: data.get('city'),
+      address: data.get('address'),
+      deadline: data.get('deadline'),
+      donor: user.name,
+      contact: data.get('contact'),
+      price: isDiscount ? Number(data.get('price')) : 0,
+      image: imageDataUrl,
+      status: user.role === 'admin' ? 'approved' : 'pending',
+      reservedBy: '',
+      owner: user.email
+    };
+
+    foods.push(newFood);
+    saveData('fs_foods', foods);
+    form.reset();
+    $('priceBox').hidden = true;
+    $('uploadMsg').textContent = newFood.status === 'approved'
+      ? 'Köszönjük! A felajánlásod azonnal megjelent.'
+      : 'Köszönjük! Az adminisztrátor jóváhagyása után a felajánlás megjeleni a böngészőben.';
+  }
+
+  if (data.get('offerType') === 'discount' && !(Number(data.get('price')) > 0)) {
+    alert('Kérjük, add meg a kedvezményes árat!');
+    return;
+  }
+
+  if (imageFile && imageFile.size > 0) {
+    if (imageFile.size > 500000) {
+      alert('A kiválasztott kép túl nagy (max. 500 KB lehet).');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = function () { saveFood(reader.result); };
+    reader.readAsDataURL(imageFile);
+  } else {
+    saveFood('');
+  }
+});
+
